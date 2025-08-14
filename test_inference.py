@@ -1,15 +1,14 @@
 import requests
 
 API_URL = "https://router.huggingface.co/v1/chat/completions"
-MODEL_ID = "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai"
 
-def get_model_reply(messages, hf_token):
+def get_model_reply(messages, hf_token, model_id):
     """
     Sends conversation history to Hugging Face API and returns the assistant's reply.
     """
     headers = {"Authorization": f"Bearer {hf_token}"}
     payload = {
-        "model": MODEL_ID,
+        "model": model_id,
         "messages": messages,
         "max_tokens": 256,
         "temperature": 0.7,
