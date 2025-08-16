@@ -38,9 +38,11 @@ if "messages" not in st.session_state:
 MODEL_ID = st.sidebar.selectbox(
     "Choose Model",
     [
-        "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai",
-        "Qwen/Qwen2.5-7B-Instruct",
-        "microsoft/Phi-3.5-mini-instruct"
+       "mistralai/Mistral-7B-Instruct-v0.3",   # latest Mistral instruct
+        "meta-llama/Llama-3-8b-instruct",       # LLaMA-3 instruct
+        "Qwen/Qwen2.5-7B-Instruct",             # Qwen2.5 instruct
+        "microsoft/Phi-3.5-mini-instruct",      # Phi-3.5 mini
+        "google/gemma-2-7b-it"  
     ]
 )
 
