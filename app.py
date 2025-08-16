@@ -38,7 +38,8 @@ MODEL_ID = st.sidebar.selectbox(
     "Choose Model",
     [
         "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai",
-        "meta-llama/Llama-2-7b-chat-hf"
+        "Qwen/Qwen2.5-7B-Instruct",
+        "microsoft/Phi-3.5-mini-instruct"
     ]
 )
 
