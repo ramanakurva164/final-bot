@@ -1,6 +1,4 @@
 import streamlit as st
-import os
-import time
 import json
 from dotenv import load_dotenv
 from test_inference import get_model_reply
@@ -12,7 +10,7 @@ load_dotenv()
 st.set_page_config(page_title="Agent Ramana (Mistral API)", page_icon="🤖", layout="wide")
 
 # Hugging Face token
-hf_token = os.getenv("HF_TOKEN") or st.secrets.get("HF_TOKEN")
+hf_token = st.secrets.get("HF_TOKEN")
 if not hf_token:
     st.error("❌ Please set your Hugging Face token in Streamlit secrets or environment variables.")
     st.stop()
