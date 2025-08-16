@@ -1,5 +1,6 @@
 import streamlit as st
 import json
+import time
 import os
 from dotenv import load_dotenv
 from test_inference import get_model_reply
