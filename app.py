@@ -90,7 +90,7 @@ if st.session_state.get("authenticated"):
                 for char in full_reply:
                     typed_text += char
                     placeholder.markdown(typed_text + "▌")
-                    time.sleep(0.015)
+                    time.sleep(0.005)
                 placeholder.markdown(typed_text)
 
                 st.session_state.messages.append({"role": "assistant", "content": full_reply})
