@@ -1,7 +1,5 @@
-streamlit
-requests
-python-dotenv
-st-login-form
-st-supabase-connection
-supabase-py
-gotrue
+streamlit==1.37.1
+st-login-form==0.4.2
+st-supabase-connection==0.1.8
+gotrue==2.4.1
+supabase==2.4.0
