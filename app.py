@@ -4,7 +4,7 @@ import time
 import os
 from dotenv import load_dotenv
 from test_inference import get_model_reply
-from st_login_form import login_form
+from st_login_form import login_form, logout
 
 # Load .env file
 load_dotenv()
@@ -19,6 +19,24 @@ if not hf_token:
     st.stop()
 
 # --- Supabase Login Form ---
+st.markdown("""
+    <style>
+    button[kind="secondary"] {
+        background-color: #ff4b4b !important;
+        color: white !important;
+        border-radius: 10px !important;
+        border: none !important;
+        padding: 10px 20px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        transition: 0.3s ease-in-out;
+    }
+    button[kind="secondary"]:hover {
+        background-color: #e60000 !important;
+        transform: scale(1.05);
+    }
+    </style>
+""", unsafe_allow_html=True)
 supabase_connection = login_form()
 
 # --- Message Persistence ---
