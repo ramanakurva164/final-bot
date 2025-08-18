@@ -3,3 +3,4 @@ requests
 python-dotenv
 st-login-form
 st-supabase-connection
+supabase
