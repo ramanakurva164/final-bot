@@ -44,15 +44,50 @@ def load_history():
 if st.session_state.get("authenticated"):
     username = st.session_state.get("username", "guest")
 
-    # --- Custom Logout Button at Top Right ---
-    col1, col2 = st.columns([8, 1])
-    with col1:
-        st.sidebar.success(f"✅ Welcome {username} 👋")
-    with col2:
-        if st.button("🚪 Logout", use_container_width=True):
-            del st.session_state["authenticated"]
-            del st.session_state["username"]
-            st.rerun()
+    # --- Custom Top Navbar with Logout ---
+    st.markdown(f"""
+        <style>
+        .top-nav {{
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background-color: #1E1E1E;
+            padding: 6px 14px;
+            border-radius: 8px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }}
+        .top-nav span {{
+            margin-right: 10px;
+            color: #fff;
+            font-weight: 500;
+        }}
+        .top-nav button {{
+            background-color: #FF4B4B;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }}
+        .top-nav button:hover {{
+            background-color: #cc0000;
+        }}
+        </style>
+        <div class="top-nav">
+            <span>👋 {username}</span>
+            <form action="" method="post">
+                <button type="submit" name="logout">🚪 Logout</button>
+            </form>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # --- Handle Logout ---
+    if st.query_params.get("logout"):
+        st.session_state.clear()
+        st.rerun()
 
     # --- Initialize Messages ---
     if "messages" not in st.session_state:
