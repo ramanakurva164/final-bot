@@ -42,53 +42,41 @@ def load_history():
 
 # --- After Authentication ---
 if st.session_state.get("authenticated"):
+    # --- Custom Top Navbar with Logout ---
     username = st.session_state.get("username", "guest")
 
-    # --- Custom Top Navbar with Logout ---
-    st.markdown(f"""
-        <style>
-        .top-nav {{
-            position: fixed;
-            top: 10px;
-            right: 20px;
-            background-color: #1E1E1E;
-            padding: 6px 14px;
-            border-radius: 8px;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-        }}
-        .top-nav span {{
-            margin-right: 10px;
-            color: #fff;
-            font-weight: 500;
-        }}
-        .top-nav button {{
-            background-color: #FF4B4B;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }}
-        .top-nav button:hover {{
-            background-color: #cc0000;
-        }}
-        </style>
-        <div class="top-nav">
-            <span>👋 {username}</span>
-            <form action="" method="post">
-                <button type="submit" name="logout">🚪 Logout</button>
-            </form>
-        </div>
-    """, unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    .top-right {
+        position: fixed;
+        top: 10px;
+        right: 20px;
+        background-color: #1E1E1E;
+        padding: 6px 14px;
+        border-radius: 8px;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+    }
+    .top-right span {
+        margin-right: 12px;
+        color: white;
+        font-weight: 500;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-    # --- Handle Logout ---
-    if st.query_params.get("logout"):
-        st.session_state.clear()
-        st.rerun()
-
+# Create container for logout button
+top_right = st.container()
+with top_right:
+    cols = st.columns([4, 1])
+    with cols[0]:
+        st.markdown(f"<div class='top-right'><span>👋 {username}</span></div>", unsafe_allow_html=True)
+    with cols[1]:
+        if st.button("🚪 Logout", key="logout_btn"):
+            del st.session_state["authenticated"]
+            del st.session_state["username"]
+            st.rerun()
     # --- Initialize Messages ---
     if "messages" not in st.session_state:
         load_history()
