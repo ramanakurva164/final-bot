@@ -18,15 +18,6 @@ if not hf_token:
     st.error("❌ Please set your Hugging Face token in Streamlit secrets or environment variables.")
     st.stop()
 
-# --- Hide Default Logout Button from st-login-form ---
-st.markdown("""
-    <style>
-    button[kind="secondary"] {
-        display: none !important;  /* Hide the default logout button */
-    }
-    </style>
-""", unsafe_allow_html=True)
-
 # --- Supabase Login Form ---
 supabase_connection = login_form()
 
@@ -42,41 +33,9 @@ def load_history():
 
 # --- After Authentication ---
 if st.session_state.get("authenticated"):
-    # --- Custom Top Navbar with Logout ---
     username = st.session_state.get("username", "guest")
+    st.sidebar.success(f"✅ Welcome {username} 👋")
 
-    st.markdown("""
-        <style>
-        .top-right {
-            position: fixed;
-            top: 10px;
-            right: 20px;
-            background-color: #1E1E1E;
-            padding: 6px 14px;
-            border-radius: 8px;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-        }
-        .top-right span {
-            margin-right: 12px;
-            color: white;
-            font-weight: 500;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    
-    # Create container for logout button
-    top_right = st.container()
-    with top_right:
-        cols = st.columns([4, 1])
-        with cols[0]:
-            st.markdown(f"<div class='top-right'><span>👋 {username}</span></div>", unsafe_allow_html=True)
-        with cols[1]:
-            if st.button("🚪 Logout", key="logout_btn"):
-                del st.session_state["authenticated"]
-                del st.session_state["username"]
-                st.rerun()
     # --- Initialize Messages ---
     if "messages" not in st.session_state:
         load_history()
