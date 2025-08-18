@@ -18,6 +18,15 @@ if not hf_token:
     st.error("❌ Please set your Hugging Face token in Streamlit secrets or environment variables.")
     st.stop()
 
+# --- Hide Default Logout Button from st-login-form ---
+st.markdown("""
+    <style>
+    button[kind="secondary"] {
+        display: none !important;  /* Hide the default logout button */
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # --- Supabase Login Form ---
 supabase_connection = login_form()
 
@@ -34,7 +43,16 @@ def load_history():
 # --- After Authentication ---
 if st.session_state.get("authenticated"):
     username = st.session_state.get("username", "guest")
-    st.sidebar.success(f"✅ Welcome {username} 👋")
+
+    # --- Custom Logout Button at Top Right ---
+    col1, col2 = st.columns([8, 1])
+    with col1:
+        st.sidebar.success(f"✅ Welcome {username} 👋")
+    with col2:
+        if st.button("🚪 Logout", use_container_width=True):
+            del st.session_state["authenticated"]
+            del st.session_state["username"]
+            st.rerun()
 
     # --- Initialize Messages ---
     if "messages" not in st.session_state:
