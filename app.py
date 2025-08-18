@@ -30,6 +30,7 @@ st.markdown("""
         font-size: 16px !important;
         font-weight: bold !important;
         transition: 0.3s ease-in-out;
+        width:100px;
     }
     button[kind="secondary"]:hover {
         background-color: #e60000 !important;
