@@ -4,11 +4,12 @@ import time
 import os
 from dotenv import load_dotenv
 from test_inference import get_model_reply
-from st_supabase_connection import SupabaseConnection
+from st_login_form import login_form
 
 # Load .env file
 load_dotenv()
 
+# Streamlit page settings
 st.set_page_config(page_title="Agent Ramana (Mistral API)", page_icon="🤖", layout="wide")
 
 # Hugging Face token
@@ -17,8 +18,8 @@ if not hf_token:
     st.error("❌ Please set your Hugging Face token in Streamlit secrets or environment variables.")
     st.stop()
 
-# --- Supabase Connection ---
-conn = st.connection("supabase", type=SupabaseConnection)
+# --- Supabase Login Form ---
+supabase_connection = login_form()
 
 # --- Message Persistence ---
 def save_history():
@@ -30,29 +31,10 @@ def load_history():
         with open("chat_history.json", "r", encoding="utf-8") as f:
             st.session_state.messages = json.load(f)
 
-# --- Authentication ---
-if "user" not in st.session_state:
-    st.subheader("🔑 Login to continue")
-
-    with st.form("login_form"):
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        submitted = st.form_submit_button("Login")
-
-        if submitted:
-            try:
-                user = conn.auth.sign_in_with_password({"email": email, "password": password})
-                if user:
-                    st.session_state.user = user
-                    st.success(f"✅ Logged in as {user.user.email}")
-                    st.rerun()
-            except Exception as e:
-                st.error(f"❌ Login failed: {e}")
-else:
-    st.sidebar.success(f"Welcome, {st.session_state.user.user.email} 👋")
-    if st.sidebar.button("Logout"):
-        st.session_state.pop("user")
-        st.rerun()
+# --- After Authentication ---
+if st.session_state.get("authenticated"):
+    username = st.session_state.get("username", "guest")
+    st.sidebar.success(f"✅ Welcome {username} 👋")
 
     # --- Initialize Messages ---
     if "messages" not in st.session_state:
@@ -103,6 +85,7 @@ else:
             try:
                 full_reply = get_model_reply(st.session_state.messages, hf_token, MODEL_ID)
 
+                # Typing effect
                 typed_text = ""
                 for char in full_reply:
                     typed_text += char
@@ -114,3 +97,7 @@ else:
                 save_history()
             except Exception as e:
                 st.error(f"API Error: {e}")
+
+# --- If Not Authenticated ---
+else:
+    st.error("❌ Please log in to access the chatbot.")
