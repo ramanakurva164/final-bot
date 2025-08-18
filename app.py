@@ -45,38 +45,38 @@ if st.session_state.get("authenticated"):
     # --- Custom Top Navbar with Logout ---
     username = st.session_state.get("username", "guest")
 
-st.markdown("""
-    <style>
-    .top-right {
-        position: fixed;
-        top: 10px;
-        right: 20px;
-        background-color: #1E1E1E;
-        padding: 6px 14px;
-        border-radius: 8px;
-        z-index: 999;
-        display: flex;
-        align-items: center;
-    }
-    .top-right span {
-        margin-right: 12px;
-        color: white;
-        font-weight: 500;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# Create container for logout button
-top_right = st.container()
-with top_right:
-    cols = st.columns([4, 1])
-    with cols[0]:
-        st.markdown(f"<div class='top-right'><span>👋 {username}</span></div>", unsafe_allow_html=True)
-    with cols[1]:
-        if st.button("🚪 Logout", key="logout_btn"):
-            del st.session_state["authenticated"]
-            del st.session_state["username"]
-            st.rerun()
+    st.markdown("""
+        <style>
+        .top-right {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background-color: #1E1E1E;
+            padding: 6px 14px;
+            border-radius: 8px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+        }
+        .top-right span {
+            margin-right: 12px;
+            color: white;
+            font-weight: 500;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # Create container for logout button
+    top_right = st.container()
+    with top_right:
+        cols = st.columns([4, 1])
+        with cols[0]:
+            st.markdown(f"<div class='top-right'><span>👋 {username}</span></div>", unsafe_allow_html=True)
+        with cols[1]:
+            if st.button("🚪 Logout", key="logout_btn"):
+                del st.session_state["authenticated"]
+                del st.session_state["username"]
+                st.rerun()
     # --- Initialize Messages ---
     if "messages" not in st.session_state:
         load_history()
