@@ -14,24 +14,24 @@ def local_css():
         <style>
         /* Main App Background */
         .stApp {
-            background-color: #ffffff;
-            color: #000000;
+            background-color: #0d1117;
+            color: white;
         }
 
         /* Sidebar */
         section[data-testid="stSidebar"] {
-            background-color: #e6f0ff !important;
-            color: black;
+            background-color: #161b22 !important;
+            color: white;
         }
 
         /* Headings */
         h1, h2, h3, h4, h5, h6 {
-            color: #0077ff;
+            color: #00BFFF;
         }
 
         /* Buttons */
         button {
-            background-color: #0077ff !important;
+            background-color: #00BFFF !important;
             color: white !important;
             border-radius: 10px !important;
             border: none !important;
@@ -39,7 +39,7 @@ def local_css():
 
         /* Radio/Selectbox Text */
         .stRadio label, .stSelectbox label {
-            color: black !important;
+            color: white !important;
         }
 
         /* Chat bubbles */
@@ -51,7 +51,7 @@ def local_css():
 
         /* Markdown text */
         .stMarkdown {
-            color: black !important;
+            color: white !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -82,7 +82,7 @@ if st.session_state.get("authenticated"):
     if page == "👤 Profile":
         st.title("👤 User Profile")
         st.markdown(f"""
-        <div style="background:#e6f0ff; padding:20px; border-radius:12px; color:black;">
+        <div style="background:#161b22; padding:20px; border-radius:12px; color:white;">
           <h3>Welcome 👋</h3>
           <p><b>Name:</b> {username}</p>
           <p><b>Status:</b> Active</p>
