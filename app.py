@@ -107,8 +107,8 @@ if st.session_state.get("authenticated"):
             "Choose Model",
             [
                 "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai",
-                "deepseek-ai/DeepSeek-V3-0324:featherless-ai",
-                "meta-llama/Meta-Llama-3.1-8B-Instruct:featherless-ai"
+                "mistralai/Mistral-7B-Instruct-v0.3:featherless-ai",
+                "Qwen/Qwen2.5-72B-Instruct:featherless-ai"
             ]
         )
 
