@@ -46,8 +46,8 @@ if st.session_state.get("authenticated"):
         st.markdown(f"""
         <div style="background:#1e1e2f; padding:20px; border-radius:12px; color:white;">
           <h3>Welcome 👋</h3>
-          <p><b>name:</b> {username}</p>
-          <p><b>Status</b> Active</p>
+          <p><b>name:</b>  {username}</p>
+          <p><b>Status</b> : Active</p>
         </div>
         """, unsafe_allow_html=True)
 
