@@ -34,8 +34,7 @@ def load_history():
 # --- After Authentication ---
 if st.session_state.get("authenticated"):
     username = st.session_state.get("username", "guest")
-    email = st.session_state.get("email", "Not provided")
-    last_login = st.session_state.get("last_login", "Unknown")
+    
 
     # Sidebar Navigation
     st.sidebar.title("📌 Navigation")
@@ -46,9 +45,9 @@ if st.session_state.get("authenticated"):
         st.title("👤 User Profile")
         st.markdown(f"""
         <div style="background:#1e1e2f; padding:20px; border-radius:12px; color:white;">
-          <h3>Welcome, {username} 👋</h3>
-          <p><b>Email:</b> {email}</p>
-          <p><b>Last Login:</b> {last_login}</p>
+          <h3>Welcome 👋</h3>
+          <p><b>name:</b> {username}</p>
+          <p><b>Status</b> Active</p>
         </div>
         """, unsafe_allow_html=True)
 
