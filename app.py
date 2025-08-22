@@ -132,4 +132,12 @@ if st.session_state.get("authenticated"):
                     typed_text = ""
                     for char in full_reply:
                         typed_text += char
-                        pl
+                        placeholder.markdown(typed_text + "▌")
+                        time.sleep(0.005)
+                    placeholder.markdown(typed_text)
+                    st.session_state.messages.append({"role": "assistant", "content": full_reply})
+                    save_history()
+                except Exception as e:
+                    st.error(f"API Error: {e}")
+else:
+    st.error("❌ Please log in to access the chatbot.")
