@@ -27,63 +27,63 @@ if not hf_token:
 def local_css():
     st.markdown("""
         <style>
-/* App Background */
-.stApp {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    color: #f5f5f5;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-}
+        /* App Background */
+        .stApp {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
 
-/* Sidebar */
-section[data-testid="stSidebar"] {
-    background: #111827 !important;
-    color: #f5f5f5;
-    border-right: 1px solid #374151;
-}
+        /* Sidebar */
+        section[data-testid="stSidebar"] {
+            background: #111827 !important;
+            color: #f5f5f5;
+            border-right: 1px solid #374151;
+        }
 
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-    color: #ffcc70;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
+        /* Headings */
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffcc70;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
 
-/* Buttons */
-button {
-    background: linear-gradient(90deg, #ff7eb3, #ff758c) !important;
-    color: white !important;
-    font-weight: 600 !important;
-    border-radius: 12px !important;
-    border: none !important;
-    padding: 8px 16px !important;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-    transition: 0.3s ease-in-out;
-}
-button:hover {
-    transform: scale(1.05);
-    background: linear-gradient(90deg, #ff758c, #ff7eb3) !important;
-}
+        /* Buttons */
+        button {
+            background: linear-gradient(90deg, #ff7eb3, #ff758c) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border-radius: 12px !important;
+            border: none !important;
+            padding: 8px 16px !important;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            transition: 0.3s ease-in-out;
+        }
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(90deg, #ff758c, #ff7eb3) !important;
+        }
 
-/* Radio/Selectbox */
-.stRadio label, .stSelectbox label {
-    color: #f5f5f5 !important;
-    font-weight: 500;
-}
+        /* Radio/Selectbox */
+        .stRadio label, .stSelectbox label {
+            color: #f5f5f5 !important;
+            font-weight: 500;
+        }
 
-/* Chat bubbles */
-.stChatMessage {
-    border-radius: 14px;
-    padding: 12px;
-    margin: 6px 0;
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(6px);
-}
+        /* Chat bubbles */
+        .stChatMessage {
+            border-radius: 14px;
+            padding: 12px;
+            margin: 6px 0;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(6px);
+        }
 
-/* Markdown text */
-.stMarkdown {
-    color: #e5e7eb !important;
-    line-height: 1.6;
-}
-</style>
+        /* Markdown text */
+        .stMarkdown {
+            color: #e5e7eb !important;
+            line-height: 1.6;
+        }
+        </style>
     """, unsafe_allow_html=True)
 
 local_css()
@@ -104,7 +104,7 @@ def load_history():
 def signup(email, password):
     try:
         result = supabase.auth.sign_up({"email": email, "password": password})
-        if result.user:   # success
+        if result.user:
             return {"user": result.user}
         else:
             return {"error": "Unknown signup error"}
@@ -114,7 +114,7 @@ def signup(email, password):
 def login(email, password):
     try:
         result = supabase.auth.sign_in_with_password({"email": email, "password": password})
-        if result.user:   # success
+        if result.user:
             return {"user": result.user}
         else:
             return {"error": "Invalid login"}
@@ -139,11 +139,11 @@ if "authenticated" not in st.session_state:
         password = st.text_input("Password", type="password")
         if st.button("Login"):
             result = login(email, password)
-            if result.get("user") is not None:
+            if result.get("user"):
                 st.session_state["authenticated"] = True
                 st.session_state["username"] = email
                 st.success("✅ Logged in successfully!")
-                st.rerun()
+                st.experimental_rerun()
             else:
                 st.error(f"❌ Login failed: {result.get('error')}")
 
@@ -152,7 +152,7 @@ if "authenticated" not in st.session_state:
         password = st.text_input("New Password", type="password", key="signup_pass")
         if st.button("Sign Up"):
             result = signup(email, password)
-            if result.get("user") is not None:
+            if result.get("user"):
                 st.success("✅ Account created! Please login.")
             else:
                 st.error(f"❌ Signup failed: {result.get('error')}")
@@ -174,7 +174,7 @@ else:
 
         if st.button("🔐 Logout"):
             logout()
-            st.rerun()
+            st.experimental_rerun()
 
     elif page == "💬 Chatbot":
         st.title("🤖 Agent Ramana (Mistral API)")
@@ -205,19 +205,20 @@ else:
 
         if user_input := st.chat_input("Say something to Ramana..."):
             st.session_state.messages.append({"role": "user", "content": user_input})
+
             with st.chat_message("user"):
                 st.markdown(user_input)
 
             with st.chat_message("assistant"):
                 placeholder = st.empty()
                 try:
-                    full_reply = get_model_reply(st.session_state.messages, hf_token, MODEL_ID)
-                    typed_text = ""
-                    for char in full_reply:
-                        typed_text += char
-                        placeholder.markdown(typed_text + "▌")
-                        time.sleep(0.005)
-                    placeholder.markdown(typed_text)
+                    # ✅ Keep only last 10 messages for speed
+                    trimmed_history = st.session_state.messages[-10:]
+                    full_reply = get_model_reply(trimmed_history, hf_token, MODEL_ID)
+
+                    # ✅ Show reply immediately (no per-char delay)
+                    placeholder.markdown(full_reply)
+
                     st.session_state.messages.append({"role": "assistant", "content": full_reply})
                     save_history()
                 except Exception as e:
