@@ -4,7 +4,6 @@ import time
 import os
 from dotenv import load_dotenv
 from test_inference import get_model_reply
-from st_login_form import login_form, logout
 
 load_dotenv()
 st.set_page_config(page_title="Agent Ramana (Mistral API)", page_icon="🤖", layout="wide")
@@ -63,8 +62,6 @@ if not hf_token:
     st.error("❌ Please set your Hugging Face token in Streamlit secrets or environment variables.")
     st.stop()
 
-supabase_connection = login_form()
-
 def save_history():
     with open("chat_history.json", "w", encoding="utf-8") as f:
         json.dump(st.session_state.messages, f, ensure_ascii=False, indent=2)
@@ -74,70 +71,63 @@ def load_history():
         with open("chat_history.json", "r", encoding="utf-8") as f:
             st.session_state.messages = json.load(f)
 
-if st.session_state.get("authenticated"):
-    username = st.session_state.get("username", "guest")
-    st.sidebar.title("📌 Navigation")
-    page = st.sidebar.radio("Go to:", ["💬 Chatbot", "👤 Profile"])
+# Sidebar Navigation
+st.sidebar.title("📌 Navigation")
+page = st.sidebar.radio("Go to:", ["💬 Chatbot", "👤 Profile"])
 
-    if page == "👤 Profile":
-        st.title("👤 User Profile")
-        st.markdown(f"""
-        <div style="background:#161b22; padding:20px; border-radius:12px; color:white;">
-          <h3>Welcome 👋</h3>
-          <p><b>Name:</b> {username}</p>
-          <p><b>Status:</b> Active</p>
-        </div>
-        """, unsafe_allow_html=True)
+if page == "👤 Profile":
+    st.title("👤 User Profile")
+    st.markdown(f"""
+    <div style="background:#161b22; padding:20px; border-radius:12px; color:white;">
+      <h3>Welcome 👋</h3>
+      <p><b>Name:</b> Guest</p>
+      <p><b>Status:</b> Active</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-        if st.button("🔐 Logout"):
-            logout()
-            st.experimental_rerun()
+elif page == "💬 Chatbot":
+    st.title("🤖 Agent Ramana (Mistral API)")
 
-    elif page == "💬 Chatbot":
-        st.title("🤖 Agent Ramana (Mistral API)")
+    if "messages" not in st.session_state:
+        load_history()
+    if "messages" not in st.session_state:
+        st.session_state.messages = [
+            {"role": "assistant", "content": "Hey, I'm Ramana (Mistral powered via API). How can I help you today? 😊"}
+        ]
 
-        if "messages" not in st.session_state:
-            load_history()
-        if "messages" not in st.session_state:
-            st.session_state.messages = [
-                {"role": "assistant", "content": "Hey, I'm Ramana (Mistral powered via API). How can I help you today? 😊"}
-            ]
+    MODEL_ID = st.sidebar.selectbox(
+        "Choose Model",
+        [
+            "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai",
+            "mistralai/Mistral-7B-Instruct-v0.3:featherless-ai",
+            "Qwen/Qwen2.5-72B-Instruct:featherless-ai"
+        ]
+    )
 
-        MODEL_ID = st.sidebar.selectbox(
-            "Choose Model",
-            [
-                "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai",
-                "mistralai/Mistral-7B-Instruct-v0.3:featherless-ai",
-                "Qwen/Qwen2.5-72B-Instruct:featherless-ai"
-            ]
-        )
+    if st.sidebar.button("Download Chat History"):
+        chat_text = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages])
+        st.download_button("Download Chat", chat_text, file_name="chat.txt")
 
-        if st.sidebar.button("Download Chat History"):
-            chat_text = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.messages])
-            st.download_button("Download Chat", chat_text, file_name="chat.txt")
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
 
-        for msg in st.session_state.messages:
-            with st.chat_message(msg["role"]):
-                st.markdown(msg["content"])
+    if user_input := st.chat_input("Say something to Ramana..."):
+        st.session_state.messages.append({"role": "user", "content": user_input})
+        with st.chat_message("user"):
+            st.markdown(user_input)
 
-        if user_input := st.chat_input("Say something to Ramana..."):
-            st.session_state.messages.append({"role": "user", "content": user_input})
-            with st.chat_message("user"):
-                st.markdown(user_input)
-
-            with st.chat_message("assistant"):
-                placeholder = st.empty()
-                try:
-                    full_reply = get_model_reply(st.session_state.messages, hf_token, MODEL_ID)
-                    typed_text = ""
-                    for char in full_reply:
-                        typed_text += char
-                        placeholder.markdown(typed_text + "▌")
-                        time.sleep(0.005)
-                    placeholder.markdown(typed_text)
-                    st.session_state.messages.append({"role": "assistant", "content": full_reply})
-                    save_history()
-                except Exception as e:
-                    st.error(f"API Error: {e}")
-else:
-    st.error("❌ Please log in to access the chatbot.")
+        with st.chat_message("assistant"):
+            placeholder = st.empty()
+            try:
+                full_reply = get_model_reply(st.session_state.messages, hf_token, MODEL_ID)
+                typed_text = ""
+                for char in full_reply:
+                    typed_text += char
+                    placeholder.markdown(typed_text + "▌")
+                    time.sleep(0.005)
+                placeholder.markdown(typed_text)
+                st.session_state.messages.append({"role": "assistant", "content": full_reply})
+                save_history()
+            except Exception as e:
+                st.error(f"API Error: {e}")
