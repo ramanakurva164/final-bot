@@ -101,17 +101,23 @@ def load_history():
 
 
 # ----------------- SUPABASE AUTH -----------------
-def login(email, password):
-    try:
-        result = supabase.auth.sign_in_with_password({"email": email, "password": password})
-        return result.__dict__  # convert to dict-like
-    except Exception as e:
-        return {"error": str(e)}
-
 def signup(email, password):
     try:
         result = supabase.auth.sign_up({"email": email, "password": password})
-        return result.__dict__  # convert to dict-like
+        if result.user:   # success
+            return {"user": result.user}
+        else:
+            return {"error": "Unknown signup error"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def login(email, password):
+    try:
+        result = supabase.auth.sign_in_with_password({"email": email, "password": password})
+        if result.user:   # success
+            return {"user": result.user}
+        else:
+            return {"error": "Invalid login"}
     except Exception as e:
         return {"error": str(e)}
 
