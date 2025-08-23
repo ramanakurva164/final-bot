@@ -3,7 +3,8 @@ import json
 import time
 import os
 from dotenv import load_dotenv
-from supabase import create_client, Client
+from supabase import create_client
+from supabase.client import Client
 from test_inference import get_model_reply
 
 # ----------------- CONFIG -----------------
