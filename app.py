@@ -143,7 +143,7 @@ if "authenticated" not in st.session_state:
                 st.session_state["authenticated"] = True
                 st.session_state["username"] = email
                 st.success("✅ Logged in successfully!")
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.error(f"❌ Login failed: {result.get('error')}")
 
@@ -174,7 +174,7 @@ else:
 
         if st.button("🔐 Logout"):
             logout()
-            st.experimental_rerun()
+            st.rerun()
 
     elif page == "💬 Chatbot":
         st.title("🤖 Agent Ramana (Mistral API)")
