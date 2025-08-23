@@ -10,8 +10,9 @@ from test_inference import get_model_reply
 load_dotenv()
 st.set_page_config(page_title="Agent Ramana (Mistral API)", page_icon="🤖", layout="wide")
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Hugging Face Token
