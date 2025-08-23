@@ -104,14 +104,14 @@ def load_history():
 def login(email, password):
     try:
         result = supabase.auth.sign_in_with_password({"email": email, "password": password})
-        return result
+        return result.__dict__  # convert to dict-like
     except Exception as e:
         return {"error": str(e)}
 
 def signup(email, password):
     try:
         result = supabase.auth.sign_up({"email": email, "password": password})
-        return result
+        return result.__dict__  # convert to dict-like
     except Exception as e:
         return {"error": str(e)}
 
