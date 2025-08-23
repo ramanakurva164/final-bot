@@ -139,7 +139,7 @@ if "authenticated" not in st.session_state:
         password = st.text_input("Password", type="password")
         if st.button("Login"):
             result = login(email, password)
-            if "user" in result and result.user is not None:
+            if result.get("user") is not None:
                 st.session_state["authenticated"] = True
                 st.session_state["username"] = email
                 st.success("✅ Logged in successfully!")
@@ -152,7 +152,7 @@ if "authenticated" not in st.session_state:
         password = st.text_input("New Password", type="password", key="signup_pass")
         if st.button("Sign Up"):
             result = signup(email, password)
-            if "user" in result and result.user is not None:
+            if result.get("user") is not None:
                 st.success("✅ Account created! Please login.")
             else:
                 st.error(f"❌ Signup failed: {result.get('error')}")
