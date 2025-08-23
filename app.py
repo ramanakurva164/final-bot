@@ -27,14 +27,63 @@ if not hf_token:
 def local_css():
     st.markdown("""
         <style>
-        .stApp { background-color: #0d1117; color: white; }
-        section[data-testid="stSidebar"] { background-color: #161b22 !important; color: white; }
-        h1, h2, h3, h4, h5, h6 { color: #00BFFF; }
-        button { background-color: #00BFFF !important; color: white !important; border-radius: 10px !important; border: none !important; }
-        .stRadio label, .stSelectbox label { color: white !important; }
-        .stChatMessage { border-radius: 12px; padding: 10px; margin: 5px 0; }
-        .stMarkdown { color: white !important; }
-        </style>
+/* App Background */
+.stApp {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: #111827 !important;
+    color: #f5f5f5;
+    border-right: 1px solid #374151;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #ffcc70;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Buttons */
+button {
+    background: linear-gradient(90deg, #ff7eb3, #ff758c) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    transition: 0.3s ease-in-out;
+}
+button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #ff758c, #ff7eb3) !important;
+}
+
+/* Radio/Selectbox */
+.stRadio label, .stSelectbox label {
+    color: #f5f5f5 !important;
+    font-weight: 500;
+}
+
+/* Chat bubbles */
+.stChatMessage {
+    border-radius: 14px;
+    padding: 12px;
+    margin: 6px 0;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(6px);
+}
+
+/* Markdown text */
+.stMarkdown {
+    color: #e5e7eb !important;
+    line-height: 1.6;
+}
+</style>
     """, unsafe_allow_html=True)
 
 local_css()
